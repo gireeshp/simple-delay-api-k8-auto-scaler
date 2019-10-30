@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: delay-api-service
+  labels:
+    app: delay-api-dep
+spec:
+  type: NodePort
+  ports:
+  - port: 8081
+    nodePort: 30000
+  selector:
+    app: delay-api-dep
