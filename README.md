@@ -1,18 +1,44 @@
 # simple-delay-api
-This is just a simple API to test K8 auto scaling project
+These are two simple APIs which induces some delay for the given number of seconds either by sleep() or by doing some CPU intensive operation
 
+## Setup
+```
+pip install -r requirements.txt
+```
+
+## Run locally
+```
+python api.py
+```
+
+## Docker build & run
+```
 docker build -t delay-api:1.0 .
-docker run -d -p 5000:5000 delay-api:1.0
+docker run -d -p 8081:8081 delay-api:1.0
+```
+OR simply pull from docker hub & run.
+```
+docker pull gireeshp/delay-api:1.0
+```
 
-# Minikube start/stop/delete/dashboard
+
+
+## Run
+Hit either of following API with URL parameter 'seconds' - which is the wait you need in number of seconds. If the argument is skipped, default wait will be 10 seconds  
+http://127.0.0.1:8081/delay?seconds=3  
+(this induces a CPU intensive wait of 3 seconds)  
+OR  
+http://127.0.0.1:8081/sleep?seconds=3  
+(this induces a simple 3 seconds delay by sleeping)  
+
+## Deploy into Kubernetes (using minikube here)
+```
 minikube start
-minikube dashboard
-minikube stop
-minikube delete
+kubectl create -f deployment.yaml
+kubectl create -f service.yaml
+```
 
-# Use local images (didn't work)
-minikube docker-env
-eval $(minikube docker-env)
+
 
 # Create deployments/services using commands
 kubectl create deployment delay-api --image gireeshp/delay-api:1.1
@@ -24,7 +50,6 @@ kubectl delete deployment delay-api
 https://kubernetes.io/docs/setup/learning-environment/minikube/
 
 # Create deployments/services using YAML
-kubectl create -f deployment.yaml
 kubectl create -f service.yaml   --Didn't work
 kubectl expose deployment delay-api-dep --type=NodePort --port=8081
 kubectl autoscale deployment delay-api-dep --cpu-percent=20 --min=1 --max=5

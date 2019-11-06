@@ -1,67 +1,44 @@
 from random import randint
 import datetime
-import threading
 from time import sleep
 
 class Delay:
+	def simple_delay_by_sleep(self, seconds):
+		"""
+		This method creates a simple delay by sleeping for 'x' seconds
+		"""
+		sleep(seconds)
+		return
 
-	def start_a_delay (self, num_of_digits, how_many_times, stop):
+	def cpu_intensive_delay(self, seconds):
+		"""
+		This method creates a delay of 'x' seconds. This may not be exact 'x' seconds, but will be. very close.
+		"""
 
-		worst_case = 10000000
-		i = 0
-		mul = 10**num_of_digits
-		match_count = 0
-		# print ("Looking for {} matches of multiples of {} ".format(how_many_times, mul))
-
+		# Take the start time into a variable.
 		start_time = datetime.datetime.now()
 
-		while not stop():
-			i+=1
-			r = randint(10000, 99999)
-			if r%mul == 0:
-				diff = self.get_the_time_difference(start_time)
-				match_count+=1
-				# print ("Got match {} in attempt {} ({} seconds). Random number was: {}".format(match_count, i, diff, r))
-			
-			if (match_count >= how_many_times):
-				diff = self.get_the_time_difference(start_time)
-				# print ("Got {} matches in {} seconds. Stopping. Bye.".format(how_many_times, diff))
+		print ("Strting at: {}".format(start_time))
+
+		while (True):
+
+			# Generate two random integers and do some calculations. This is just to induce some load on the CPU
+			a = randint(100000, 9999999)
+			b = randint(100000, 9999999)
+			c = a*b
+			d = a/b
+
+			# Check time. If we pass 'x' seconds, exit.
+			if self.get_the_time_difference(start_time) > seconds:
+				print ("Exiting at: {}".format(datetime.datetime.now()))
 				break
 
-			if i >= worst_case:
-				diff = self.get_the_time_difference(start_time)
-				# print ("Tried {} times in {} seconds without enough matches. Got only {} matches. Was looking for {}. I quit.".format(worst_case, diff, match_count, how_many_times))
-				break
-		
-		if (stop()):
-			print ("Ooops. Somebody stopped me.")
-
+		return
 
 	def get_the_time_difference (self,start_time):
+		"""
+		Take start time parameter. Get current time and return the difference in seconds.
+		"""
 		end_time = datetime.datetime.now()
 		delta = end_time - start_time
 		return delta.total_seconds()
-
-if __name__ == "__main__":
-
-	flag = False
-	print (not flag)
-
-	"""
-	# slow_down(4, 500)
-	d = delay();
-	stop = False
-
-	t = threading.Thread(target=d.start_a_delay, args=(4,500,lambda : stop,))
-	t.daemon = True
-	t.start()
-	print ("Started the thread")
-
-	sleep(2)
-	print ("Woke up after 2 seconds. Stopping")
-	stop = True
-	print ("Stopped..")
-	print (t.is_alive())
-	t.join()
-	print (t.is_alive())
-	"""

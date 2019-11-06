@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 ENTRYPOINT [ "python" ]
-CMD [ "delay-api.py" ]
+CMD [ "api.py" ]
