@@ -66,6 +66,7 @@ deployment.apps/delay-api-dep created
 ```
 
 We can see the deployment in the minikube dashboard.
+<img width="1239" alt="MinikubeDB-delay-api-deployment" src="https://user-images.githubusercontent.com/4717349/68527039-8f7a4c80-0308-11ea-84d3-d529de5e7f7b.png">
 
 Use below command to find the POD IPs
 ```
