@@ -64,7 +64,7 @@ http://192.168.64.21/sleep
 &nbsp;  
 ### Testing the auto-scaling
 
-Use this [simulator](https://github.com/gireeshp/API-Hitting-Simulator) to simulate parallel hits. Provide inputs needed by the simulator as below.
+Use this [simulator](https://github.com/gireeshp/API-Hitting-Simulator) to simulate parallel hits. Provide inputs needed by the simulator as below.   
 URL - http://192.168.64.21/delay   
 Total - 1000   
 Parallel - 50   
@@ -79,7 +79,7 @@ NAME        READY   UP-TO-DATE   AVAILABLE   AGE
 delay-api   1/1     1            1           17m
 ```
 
-Check after a few minutes
+Now start simulator & check status after a few seconds
 ```
 simple-delay-api$ kubectl get hpa
 NAME        REFERENCE              TARGETS    MINPODS   MAXPODS   REPLICAS   AGE
@@ -100,3 +100,5 @@ delay-api-fb78b764b-hpmpf   1/1     Running   0          2m1s
 delay-api-fb78b764b-hwd7j   1/1     Running   0          106s
 delay-api-fb78b764b-kzbs2   1/1     Running   0          2m16s
 ```
+
+We can see the deployment is auto scaled as per the load induced by the simulator.
