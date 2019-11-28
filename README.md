@@ -61,3 +61,42 @@ Now we can access the API over browser using URLs
 http://192.168.64.21/delay
 OR
 http://192.168.64.21/sleep
+&nbsp;  
+### Testing the auto-scaling
+
+Use the <> to simulate the hits. Provide values as below.
+URL - http://192.168.64.21/delay   
+Total - 1000   
+Parallel - 50   
+&nbsp;  
+Check current status before clicking "Start" button   
+```
+simple-delay-api$ kubectl get hpa
+NAME        REFERENCE              TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+delay-api   Deployment/delay-api   0%/25%    1         10        1          17m
+simple-delay-api$ kubectl get deploy
+NAME        READY   UP-TO-DATE   AVAILABLE   AGE
+delay-api   1/1     1            1           17m
+```
+
+Check after a few minutes
+```
+simple-delay-api$ kubectl get hpa
+NAME        REFERENCE              TARGETS    MINPODS   MAXPODS   REPLICAS   AGE
+delay-api   Deployment/delay-api   201%/25%   1         10        10         20m
+simple-delay-api$ kubectl get deploy
+NAME        READY   UP-TO-DATE   AVAILABLE   AGE
+delay-api   10/10   10           10          20m
+simple-delay-api$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+delay-api-fb78b764b-4xlxl   1/1     Running   0          2m1s
+delay-api-fb78b764b-86cf9   1/1     Running   0          2m1s
+delay-api-fb78b764b-94s5q   1/1     Running   0          20m
+delay-api-fb78b764b-dprgw   1/1     Running   0          2m16s
+delay-api-fb78b764b-gqtg5   1/1     Running   0          2m16s
+delay-api-fb78b764b-h695t   1/1     Running   0          2m1s
+delay-api-fb78b764b-hbf4g   1/1     Running   0          106s
+delay-api-fb78b764b-hpmpf   1/1     Running   0          2m1s
+delay-api-fb78b764b-hwd7j   1/1     Running   0          106s
+delay-api-fb78b764b-kzbs2   1/1     Running   0          2m16s
+```
