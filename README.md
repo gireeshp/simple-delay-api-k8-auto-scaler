@@ -1,5 +1,5 @@
-# simple-delay-api
-These are two simple APIs which induces some delay for the given number of seconds either by sleep() or by doing some CPU intensive operation
+# simple-delay-api-k8-auto-scaler
+These are two simple APIs which induces some delay for the given number of seconds either by sleep() or by doing some CPU intensive operation. We will deploy these API into Kubernetes and demonstrate how auto scaling works.
 &nbsp;  
 &nbsp;  
 ### Setup
