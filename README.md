@@ -22,7 +22,7 @@ OR simply pull from docker hub & run.
 docker run -d -p 8081:8081 gireeshp/delay-api:1.0
 ```
 &nbsp;  
-## Access the application URL
+### Access the application URL
 Hit either of following API with URL parameter 'seconds' - which is the wait you need in number of seconds. If the argument is skipped, default wait will be 10 seconds  
 http://127.0.0.1:8081/delay?seconds=3  
 (this induces a CPU intensive wait of 3 seconds)  
@@ -32,7 +32,7 @@ http://127.0.0.1:8081/sleep?seconds=3
 
 &nbsp;  
 &nbsp;  
-# Deploying to Kubernetes
+### Deploying to Kubernetes
 This section explains how this application can be deployed to Kubernetes. Using minikube here (see [setting up minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/)). We are going to create the Deployment, Service, Ingress & a Horizontal Auto Scaler.
 &nbsp;  
 
@@ -64,7 +64,7 @@ http://192.168.64.21/sleep
 &nbsp;  
 ### Testing the auto-scaling
 
-Use the <> to simulate the hits. Provide values as below.
+Use this [simulator](https://github.com/gireeshp/API-Hitting-Simulator) to simulate parallel hits. Provide inputs needed by the simulator as below.
 URL - http://192.168.64.21/delay   
 Total - 1000   
 Parallel - 50   
