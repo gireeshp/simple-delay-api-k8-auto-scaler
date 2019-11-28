@@ -33,68 +33,31 @@ http://127.0.0.1:8081/sleep?seconds=3
 &nbsp;  
 &nbsp;  
 # Deploying to Kubernetes
-This section explains how this imple delay application can be deployed to Kubernetes. Using minikube here (see [setting up minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/))
+This section explains how this application can be deployed to Kubernetes. Using minikube here (see [setting up minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/)). We are going to create the Deployment, Service, Ingress & a Horizontal Auto Scaler.
 &nbsp;  
 
 ### Start minikube
 ```
-(base) Gireeshs-MacBook-Pro:~ gireesh$ minikube start
-😄  minikube v1.5.0 on Darwin 10.14.6
-✨  Automatically selected the 'hyperkit' driver
-🔥  Creating hyperkit VM (CPUs=2, Memory=2000MB, Disk=20000MB) ...
-🐳  Preparing Kubernetes v1.16.2 on Docker 18.09.9 ...
-🚜  Pulling images ...
-🚀  Launching Kubernetes ... 
-⌛  Waiting for: apiserver proxy etcd scheduler controller dns
-🏄  Done! kubectl is now configured to use "minikube"
-```
-Start the dashboard too, so that we can verify the components.
-```
-(base) Gireeshs-MacBook-Pro:simple-delay-api gireesh$ minikube dashboard
-🤔  Verifying dashboard health ...
-🚀  Launching proxy ...
-🤔  Verifying proxy health ...
-🎉  Opening http://127.0.0.1:52788/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/ in your default browser...
-```
+simple-delay-api$ minikube start
+simple-delay-api$ minikube addons enable heapster
+simple-delay-api$ minikube addons enable metrics-server
+simple-delay-api$ kubectl apply -f k8.yaml 
 
-
+ingress.networking.k8s.io/delay-api created
+service/delay-api created
+deployment.apps/delay-api created
+horizontalpodautoscaler.autoscaling/delay-api created
+```
 &nbsp;  
-### Create Deployment
+
+Check the ingress IP.
 ```
-(base) Gireeshs-MacBook-Pro:simple-delay-api gireesh$ kubectl create -f deployment.yaml
-deployment.apps/delay-api-dep created
+simple-delay-api$ kubectl get ingress
+NAME        HOSTS   ADDRESS         PORTS   AGE
+delay-api   *       192.168.64.21   80      2m25s
 ```
 
-We can see the deployment in the minikube dashboard.
-<img width="1239" alt="MinikubeDB-delay-api-deployment" src="https://user-images.githubusercontent.com/4717349/68527039-8f7a4c80-0308-11ea-84d3-d529de5e7f7b.png">
-
-Use below command to find the POD IPs
-```
-kubectl get pods -l app=delay-api-dep -o yaml | grep podIP
-    podIP: 172.17.0.6
-    podIPs:
-    podIP: 172.17.0.7
-    podIPs:
-```
-
-Now we can access the application in POD from any Kubernetes Nodes. For minikube, use "minikube ssh" command to get into the Node and use curl to try out the application:
-```
-(base) Gireeshs-MacBook-Pro:~ gireesh$ minikube ssh
-                         _             _            
-            _         _ ( )           ( )           
-  ___ ___  (_)  ___  (_)| |/')  _   _ | |_      __  
-/' _ ` _ `\| |/' _ `\| || , <  ( ) ( )| '_`\  /'__`\
-| ( ) ( ) || || ( ) || || |\`\ | (_) || |_) )(  ___/
-(_) (_) (_)(_)(_) (_)(_)(_) (_)`\___/'(_,__/'`\____)
-
-$ curl 172.17.0.6:8081/delay?seconds=3
-Successful$ 
-$ 
-```
-
-### Create Service
-Now let's create a service
-```
-kubectl create -f service.yaml
-service/delay-api-service created
-```
+Now we can access the API over browser using URLs
+http://192.168.64.21/delay
+OR
+http://192.168.64.21/sleep
